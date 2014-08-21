@@ -7,29 +7,51 @@
 		
 		function index(){
 			$this->load->view("upLoad/upload");
-			$config['upload_path'] = './uploads/invoices/';
-    		$config['allowed_types'] = 'gif|jpg|jpeg|png|pdf|bmp';
+		}
+		
+		function checkFolder(){
+			$nameFolder = array('mouth' => date('m'),'year' => date('Y'));
+			$this->checkNameFolderYear($nameFolder);
 		}
 
-		function doUpload(){
-			$config =array(
-				"upload_path"=>"assets/image",
-				"allowed_types"=>"jpg|jps|gif|png|pns|jpeg",
-				);
-			$this->load->library("upload",$config);
+		function checkNameFolderYear($nameFolder){
+			$fileTargetYear = file_exists("assets/image/".$nameFolder['year']."/");
+			if(empty($fileTargetYear)){
+				mkdir("assets/image/".$nameFolder['year']);
+				$this->checkNameFolderMouth($nameFolder);
+			}else
+				$this->checkNameFolderMouth($nameFolder);
+		}
 
+		function checkNameFolderMouth($nameFolder){
+			$fileTargetMouth = file_exists("assets/image/".$nameFolder['year']."/".$nameFolder['mouth']);
+			if(empty($fileTargetMouth)){
+				mkdir("assets/image/".$nameFolder['year']."/".$nameFolder['mouth']);
+				$this->configUpload($nameFolder);
+			}else
+				$this->configUpload($nameFolder);
+		}
+
+		function configUpload($nameFolder){	
+			$partFolder = "assets/image/".$nameFolder['year']."/".$nameFolder['mouth']."/";
+			$config =array( "upload_path"=>$partFolder,
+							"allowed_types"=>"jpg|jps|gif|png|pns|jpeg");
+			$this->checkUpload($config,$partFolder);
+		}
+
+		function checkUpload($config,$partFolder){
+			$this->load->library("upload",$config);
 			if($this->upload->do_upload("upload")){
 				$data = $this->upload->data();
 				// echo "<pre>";
 				// print_r($data);
-				$pic['name']=$data['file_name'];
+				$pic['namePic'] = $data['file_name'];
+				$pic['partPic'] = $partFolder;
 				$this->load->view('upload/showPicUpload',$pic);
 			}else{
 				echo $this->upload->display_errors();
 				echo anchor("upload/conUpload","Back");
 			}
-// $this->load->view("upLoad/showPicUpload");
-
 		}
 	}
 ?>

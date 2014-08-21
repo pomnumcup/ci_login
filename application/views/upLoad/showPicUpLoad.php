@@ -6,8 +6,6 @@
 </head>
 <body>
 	<div align="center"><h3>แสดงรูปภาพ</h3></div>
-	<?php $pic=$name ?>
-
-	<div align="center"><img src="<?php echo base_url(); ?>\assets\image\<?php echo $pic; ?>" width="300" height="200"></div>
+	<div align="center"><img src="<?php echo base_url().$partPic.$namePic; ?>" width="300" height="200"></div>
 </body>
 </html>
