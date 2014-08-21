@@ -1,14 +1,14 @@
 <?php
 	class con_login extends CI_Controller{
-		function index($fail=""){
+		function index($fail=''){
 			$data['fail'] = $fail;
 			$this->load->library('session');
 			$data['userID'] = $this->session->userdata('userID');
 			$data['nameUser'] = $this->session->userdata('nameUser');
 			if($data['userID'])
-				$this->load->view("login/loginComplete",$data);
+				$this->load->view('login/loginComplete',$data);
 			else
-				$this->load->view("login/login",$data);
+				$this->load->view('login/login',$data);
 		}
 
 		function checkInput(){
@@ -17,7 +17,7 @@
 			if($inputUser&&$inputPassword)
 				$this->checkLogin($inputUser,$inputPassword);
 			else
-				$this->index("*** กรุรากรอกข้อมูลให้ครบถ้วน");
+				$this->index('*** กรุรากรอกข้อมูลให้ครบถ้วน');
 		}
 
 		function checkLogin($inputUser,$inputPassword){
@@ -38,13 +38,14 @@
 			if($memberNumRow){
 				$member = $this-> model_login ->queryMember();
 				$positionMember = $member[0]->position_id;
-				$this->checkPosition($positionMember,$member);
+				$this->checkPosition($member);
 			}
 			else
 				$this->index('*** ชื่อผู้เข้าระบบหรือรหัสผ่านไม่ถูกต้อง');
 		}
 
-		function checkPosition($positionMember,$member){
+		function checkPosition($member){
+			$positionMember = $member[0]->position_id;
 			switch($positionMember){
 				case '1':
 				case '2':
@@ -53,16 +54,13 @@
 					$this->index();
 					break;
 				case '5':
-					$this->index("*** ไอดีถูกระงับ");
+					$this->index('*** ไอดีถูกระงับ');
 					break;
 			}
 		}
 
 		function logout(){
-			$this->load->library('session');
-			$login=array('nameUser'=>'','userID'=>'' );
-			$this->session->unset_userdata($login);
-			$this->session->sess_destroy();
+			$this->model_login->clearSession();
 			$this->index();
 		}
 	}

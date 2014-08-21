@@ -28,7 +28,7 @@ class model_login extends CI_Model{
 		$firstName = $member[0]->member_first_name;
 		$lastName = $member[0]->member_last_name;
 		$userID = $member[0]->member_id;
-		$nameUser = $firstName." ".$lastName;
+		$nameUser = $firstName.' '.$lastName;
 		$this->setSession($userID,$nameUser);
 	}
 
@@ -36,6 +36,13 @@ class model_login extends CI_Model{
 		$this->load->library('session');
 		$login=array('nameUser'=>$nameUser,'userID'=>$userID );
 		$this->session->set_userdata($login);
+	}
+
+	function clearSession(){
+		$this->load->library('session');
+		$login=array('nameUser'=>'','userID'=>'' );
+		$this->session->unset_userdata($login);
+		$this->session->sess_destroy();
 	}
 }
 ?>
