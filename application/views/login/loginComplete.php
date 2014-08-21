@@ -1,5 +1,5 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<form action="<?=site_url('login/con_login/logout');?>" method="post">
+<form action="logout" method="post">
 	  <table>
 	  	<tr>
 		    <td align="right">สวัสดี คุณ  <?php echo $nameUser ?></td>

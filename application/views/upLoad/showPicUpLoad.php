@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 	<title>แสดงรูปภาพตัวอย่าง</title>
@@ -6,6 +6,8 @@
 </head>
 <body>
 	<div align="center"><h3>แสดงรูปภาพ</h3></div>
-	<div align="center"><img src = "lilies.jpg" width="200" height="150" border="1"></div>
+	<?php $pic=$name ?>
+
+	<div align="center"><img src="<?php echo base_url(); ?>\assets\image\<?php echo $pic; ?>" width="300" height="200"></div>
 </body>
 </html>

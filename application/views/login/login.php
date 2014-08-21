@@ -9,7 +9,7 @@
 <form action="<?=site_url('login/con_login/checkInput');?>" method="post">
 	  	
 	  	<tr >
-		    <td align="right" colspan="2"><h6><?php echo $fail; ?></h6></td>
+		    <td align="right" colspan="2" style="font-size: 14px; color: #ff0000";><?php echo $fail; ?></td>
 	  	</tr>
 	  	<tr>
 		    <td width="150px;" align="right">User :</td>

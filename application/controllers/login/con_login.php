@@ -17,7 +17,7 @@
 			if($inputUser&&$inputPassword)
 				$this->checkLogin($inputUser,$inputPassword);
 			else
-				$this->index('*** กรุรากรอกข้อมูลให้ครบถ้วน');
+				$this->index('*** กรุณากรอกข้อมูลให้ครบถ้วน');
 		}
 
 		function checkLogin($inputUser,$inputPassword){

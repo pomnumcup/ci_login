@@ -1,4 +1,6 @@
-<?php echo form_open_multipart('upLoad/conUpload/index');?>
-<input type="file" name="userfile" size="20" />
-<input type="submit" value="upload" />
+<?php echo form_open_multipart('upload/conUpload/doUpload');?>
+<div >
+	<div><input type="file" name="upload" size="20" /></div>
+	<div><input type="submit" value="upload" name"Upload" /></div>
+</div>
 </form>
