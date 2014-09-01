@@ -109,8 +109,8 @@ $autoload['language'] = array();
 |
 */
 
-$autoload['model'] = array('detailSale/model_connectDB','login/model_login');
-
+$autoload['model'] = array('detailSale/model_connectDB','contact/modelContact'
+							,'testLogin/modelLogin','backoffice/ModelContactUs');
 
 /* End of file autoload.php */
 /* Location: ./application/config/autoload.php */

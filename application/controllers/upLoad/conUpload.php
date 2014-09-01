@@ -3,55 +3,79 @@
 		function __construct(){
 		  parent::__construct();
 		  $this->load->helper('url');
+		  $this->load->model('upload/modelUpload');
 		}
 		
 		function index(){
 			$this->load->view("upLoad/upload");
 		}
 		
-		function checkFolder(){
-			$nameFolder = array('mouth' => date('m'),'year' => date('Y'));
-			$this->checkNameFolderYear($nameFolder);
+		function getInputValue(){
+			$dataNews = array('newsTitle' => $this->input->post('newsTitle'),
+							'newsDescription' => $this->input->post('newsDescription'),
+							'newsLinkYoutube' => $this->input->post('newsLinkYoutube'));
+			$this->sentNewsDataToModel($dataNews);
+			$this->configUpload();
+		}
+/////////////////////////////
+		function sentNewsDataToModel($dataNews){
+			$sqlData = $this->modelUpload->setInputDataNews($dataNews);
+			$this->modelUpload->queryNewsData($sqlData);
 		}
 
-		function checkNameFolderYear($nameFolder){
-			$fileTargetYear = file_exists("assets/image/".$nameFolder['year']."/");
-			if(empty($fileTargetYear)){
-				mkdir("assets/image/".$nameFolder['year']);
-				$this->checkNameFolderMouth($nameFolder);
-			}else
-				$this->checkNameFolderMouth($nameFolder);
-		}
-
-		function checkNameFolderMouth($nameFolder){
-			$fileTargetMouth = file_exists("assets/image/".$nameFolder['year']."/".$nameFolder['mouth']);
-			if(empty($fileTargetMouth)){
-				mkdir("assets/image/".$nameFolder['year']."/".$nameFolder['mouth']);
-				$this->configUpload($nameFolder);
-			}else
-				$this->configUpload($nameFolder);
-		}
-
-		function configUpload($nameFolder){	
-			$partFolder = "assets/image/".$nameFolder['year']."/".$nameFolder['mouth']."/";
+		function configUpload(){	
+			$folder = $this->modelUpload->setFolder();
+			$partFolder = $folder['mouth'];
 			$config =array( "upload_path"=>$partFolder,
 							"allowed_types"=>"jpg|jps|gif|png|pns|jpeg");
 			$this->checkUpload($config,$partFolder);
 		}
-
+//////////////////////////////
 		function checkUpload($config,$partFolder){
-			$this->load->library("upload",$config);
-			if($this->upload->do_upload("upload")){
+			$this->load->library('upload',$config);
+			 if($this->upload->do_upload('upload')){
 				$data = $this->upload->data();
-				// echo "<pre>";
-				// print_r($data);
-				$pic['namePic'] = $data['file_name'];
-				$pic['partPic'] = $partFolder;
-				$this->load->view('upload/showPicUpload',$pic);
+				$fullPartPic = $partFolder.$data['file_name']; //// SET
+				$this->checkNameFolderYear($fullPartPic); 
 			}else{
 				echo $this->upload->display_errors();
-				echo anchor("upload/conUpload","Back");
+				echo anchor('upload/conUpload',' Back');
 			}
+		}
+
+		function checkNameFolderYear($fullPartPic){
+			$folder = $this->modelUpload->setFolder();
+			$targetFolderYear = file_exists($folder['year']);
+			if(empty($targetFolderYear)){
+				mkdir($folder['year']);
+				$this->checkNameFolderMouth($fullPartPic);
+			}else{
+				$this->checkNameFolderMouth($fullPartPic);
+			}
+		}
+
+		function checkNameFolderMouth(){
+			$folder = $this->modelUpload->setFolder();
+			$targetFolderMouth = file_exists($folder['mouth']);
+			if(empty($targetFolderMouth)){
+				mkdir($folder['mouth']);
+				$this->checkNewsID($fullPartPic);
+			}else{
+				$this->checkNewsID($fullPartPic);
+			}
+		}
+
+		function checkNewsID($fullPartPic){
+			$sqlGetNewsID = "SELECT news_id
+							FROM news";
+			$newsID = $this->modelUpload->setNewsID($sqlGetNewsID);
+			$this->sentSQLToModelUpdate($fullPartPic,$newsID);
+		}
+
+		function sentSQLToModelUpdate($fullPartPic,$newsID){
+			$sqlMedia = "INSERT INTO picture (pic_full_part,news_id)
+						VALUES ('$fullPartPic','$newsID')";
+			$this-> modelUpload -> queryNewsData($sqlMedia);
 		}
 	}
 ?>

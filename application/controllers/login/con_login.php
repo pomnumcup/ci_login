@@ -37,7 +37,7 @@
 			$memberNumRow = $this -> model_login ->quuryNumRow();
 			if($memberNumRow){
 				$member = $this-> model_login ->queryMember();
-				$positionMember = $member[0]->position_id;
+				// $positionMember = $member[0]->position_id;
 				$this->checkPosition($member);
 			}
 			else
